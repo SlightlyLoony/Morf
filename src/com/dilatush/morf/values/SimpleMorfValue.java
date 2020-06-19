@@ -8,23 +8,13 @@ import com.dilatush.morf.typedefs.MorfTypeDef;
 /**
  * @author Tom Dilatush  tom@dilatush.com
  */
-public class MorfImmutableValue implements MorfValue {
-
-    private final Object      value;
-    private final MorfTypeDef type;
-    private final MorfValue   parent;
+public class SimpleMorfValue implements MorfValue {
 
 
-    public MorfImmutableValue( final MorfValue _parent, final MorfTypeDef _type, final Object _value ) {
-        parent = _parent;
-        value  = _value;
-        type   = _type;
-    }
-
-
-    public MorfImmutableValue( final MorfTypeDef _type, final Object _value ) {
-        this( null, _type, _value );
-    }
+    private Object      value;
+    private boolean     locked;
+    private MorfTypeDef typeDef;
+    private MorfValue   parent;
 
 
     /**
@@ -51,7 +41,8 @@ public class MorfImmutableValue implements MorfValue {
      */
     @Override
     public void set( final Object value ) {
-        throw new UnsupportedOperationException( "Cannot set value of MorfImmutableValue" );
+        if( locked )
+            throw new UnsupportedOperationException( "Can't modify locked value" );
     }
 
 
@@ -72,19 +63,29 @@ public class MorfImmutableValue implements MorfValue {
      * @return the {@link MorfTypeDef} for this Morf value.
      */
     @Override
-    public MorfTypeDef type() {
-        return type;
+    public MorfTypeDef typeDef() {
+        return typeDef;
     }
 
 
     /**
-     * Returns an immutable version of this Morf value.  If this Morf value is already immutable, returns itself.  Otherwise, a new immutable Morf
-     * value is constructed and returned, copying the Morf type definitions, structure, and Java values for every value in this Morf value.
+     * Returns <code>true</code> if this Morf value is locked (immutable), otherwise returns <code>false</code>.
      *
-     * @return an immutable version of this Morf value.
+     * @return returns <code>true</code> if this Morf value is locked (immutable).
      */
     @Override
-    public MorfValue getImmutable() {
-        return null;  // TODO: implement this!
+    public boolean isLocked() {
+        return locked;
+    }
+
+
+    /**
+     * Lock this Morf value, preventing any changes.  In other words, makes this Morf value immutable.  Any contained Morf values will also be locked,
+     * recursively.  Note that locking a Morf value <i>only</i> prevents the {@link #set(Object)} method from working -- it does <i>not</i> prevent a
+     * value retrieved by {@link #get()} from being changed, if that value is itself mutable.
+     */
+    @Override
+    public void lock() {
+        locked = true;
     }
 }

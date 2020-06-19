@@ -47,14 +47,21 @@ public interface MorfValue {
      *
      * @return the {@link MorfTypeDef} for this Morf value.
      */
-    MorfTypeDef type();
+    MorfTypeDef typeDef();
 
 
     /**
-     * Returns an immutable version of this Morf value.  If this Morf value is already immutable, returns itself.  Otherwise, a new immutable Morf
-     * value is constructed and returned, copying the Morf type definitions, structure, and Java values for every value in this Morf value.
+     * Returns <code>true</code> if this Morf value is locked (immutable), otherwise returns <code>false</code>.
      *
-     * @return an immutable version of this Morf value.
+     * @return returns <code>true</code> if this Morf value is locked (immutable).
      */
-    MorfValue getImmutable();
+    boolean isLocked();
+
+
+    /**
+     * Lock this Morf value, preventing any changes.  In other words, makes this Morf value immutable.  Any contained Morf values will also be locked,
+     * recursively.  Note that locking a Morf value <i>only</i> prevents the {@link #set(Object)} method from working -- it does <i>not</i> prevent
+     * a value retrieved by {@link #get()} from being changed, if that value is itself mutable.
+     */
+    void lock();
 }
