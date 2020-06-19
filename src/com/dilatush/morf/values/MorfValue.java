@@ -6,24 +6,27 @@ import com.dilatush.morf.collections.MorfMap;
 import com.dilatush.morf.typedefs.MorfTypeDef;
 
 /**
- * Implemented by classes that provide Morf values.
+ * <p>Implemented by classes that represent Morf values.</p>
+ *
+ * <p><code>MorfValue</code> instances represent either a single value (such as an integer, String, enumeration, etc.) or a collection of other
+ * Morf values.  When the value represented is a collection, it is an instance of a class that implements {@link MorfCollection}, along with one
+ * or both of {@link MorfMap} or {@link MorfArray}.  Morf collections can contain either single values or other Morf collections, so arbitrarily
+ * deep structures can be represented.</p>
  *
  * @author Tom Dilatush  tom@dilatush.com
  */
 public interface MorfValue {
 
     /**
-     * <p>Returns the Java value of this Morf value.  This value may be of any Java type, but it is guaranteed to be either <code>null</code> (if the
-     * <code>MorfTypeDef</code> in this Morf value allows nulls) or a type assignable to the Java type in the MorfTypeDef in this Morf value.</p>
+     * <p>Returns the Java value of this Morf value, if it is a simple value (that is, not a collection of values).  This value may be of any Java
+     * type, but it is guaranteed to be either <code>null</code> (if the <code>MorfTypeDef</code> in this Morf value allows nulls) or a type
+     * assignable to the Java type in the MorfTypeDef in this Morf value.</p>
      *
-     * <p><code>MorfValue</code> instances represent either a single value (such as an integer, String, enumeration, etc.) or a collection of other
-     * Morf values.  When the value represented is a collection, it is an instance of a class that implements {@link MorfCollection}, along with one
-     * or both of {@link MorfMap} or {@link MorfArray}.  Morf collections can contain either single values or other Morf collections, so arbitrarily
-     * deep structures can be represented.</p>
+     * 
      *
      * @return the Java value of this Morf value.
      */
-    Object get();
+    Object get() throws UnsupportedOperationException;
 
 
     /**
