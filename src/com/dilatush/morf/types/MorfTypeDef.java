@@ -1,4 +1,4 @@
-package com.dilatush.morf.typedefs;
+package com.dilatush.morf.types;
 
 /**
  * Implemented by classes that define Morf data type nodes.
@@ -13,4 +13,7 @@ public interface MorfTypeDef {
      * @return
      */
     Class<Object> get();
+
+
+    boolean allowNull();
 }

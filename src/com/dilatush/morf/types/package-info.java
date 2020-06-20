@@ -21,4 +21,4 @@
  *
  * @author Tom Dilatush  tom@dilatush.com
  */
-package com.dilatush.morf.typedefs;
+package com.dilatush.morf.types;

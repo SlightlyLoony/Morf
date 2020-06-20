@@ -1,0 +1,116 @@
+/////////////////////
+// simple map of values implementing a double's fields, with no morf type specs...
+{
+    boolean sign;
+    int     exponent;
+    long    fraction;
+}
+
+
+/////////////////////
+// ordered map of values implementing a double's fields, with morf type specs...
+// this would allow raw encoding/decoding of the double
+morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
+<
+    boolean(bits:1) sign;
+    int(bits:11)    exponent;
+    long(bits:52)   fraction;
+>
+
+
+/////////////////////
+// morf type specs definition
+//
+// morf type specs are arbitrary semi-colon separated strings enclosed in parentheses, following the Java type.  If a closing parenthesis or a
+// semicolon are needed in the string, they may be escaped with a backslash ("\").  The morfer specified is responsible for interpreting these
+// strings, which are delivered to the morfer as an array (or list) of decoded strings.  The use of a colon to separate name and value is not
+// required, but is conventional.  Some examples:
+//
+//  // delivers ["simple"] to the morfer
+//  int (simple) simple;
+//
+//  // delivers ["bits:11"] to the morfer
+//  int(bits:11)   exponent;
+//
+//  // delivers ["bits:11", "offset:1023"] to the morfer
+//  int (bits:11;offset:1023) exponent;
+//
+//  // delivers ["terminator:;","enclosure:()"] to the morfer
+//  double (terminator:\;;enclosure:\(\)) omg;
+//
+
+
+/////////////////////
+// ordered map of values implementing a double's fields plus enhanced fields, with morf specs...
+// this would allow raw encoding/decoding of the double, and adds computed fields
+morfer com.dilatush.morf.morfers.DoubleMorfer;  // the morfer class...
+
+// in the morfer, we define an enum DoubleType{ NaN, Zero, Infinity, Real }
+// the line below defines a shorthand reference to that type
+doubleType = com.dilatush.morf.morfer.DoubleMorfer.DoubleType;
+<
+    // the raw type specification, just as above...
+    boolean(bits:1) sign;
+    int(bits:11)    rawExponent;
+    long(bits:52)   rawFraction;
+
+    // the computed fields added by the morfer on decode, used by the morfer on encode...
+    int             exponent;  // offset in raw exponent removed...
+    long            fraction;  // implied leading "1" added for non-zero reals...
+    doubleType      type;      // decoded type of this double...
+    boolean         signaling; // if the decoded type is NaN, this is true for a signaling NaN (and the fraction is the signal)...
+>
+
+
+/////////////////////
+// simple array of integers, with no morf type specs...
+[
+    int;  // there is no name, as array elements may only be accessed by index or iterator...
+]
+
+
+/////////////////////
+// simple array of integers, with morf type specs...
+morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
+
+[
+    int (bits:2);  // there is no name, as array elements may only be accessed by index or iterator...
+]
+
+
+/////////////////////
+// simple array of simple mapped type, with no morf type specs...
+[
+    {
+        String  firstName;
+        String  lastName;
+        byte    age;
+        boolean bald;
+        double  weight;
+    }
+]
+
+
+/////////////////////
+// simple array of simple mapped type, with no morf type specs, showing optional fields...
+// optional fields can ONLY appear in simple mapped types; they have a value of null if not decoded,
+// and values of null are encoded as absent.
+[
+    {
+        String  firstName;
+        String  lastName;
+        byte    age;
+        boolean bald(?);
+        double  weight(?);
+    }
+]
+
+
+/////////////////////
+// simple array of integers, with morf type specs, showing optional (nullable) element...
+// this would allow morfing JSON like this: "[12,56,null,88,null,null,21]"...
+morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
+
+[
+    int (bits:7)(?);  // there is no name, as array elements may only be accessed by index or iterator...
+]
