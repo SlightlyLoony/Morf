@@ -21,10 +21,10 @@ morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
 /////////////////////
 // morf type specs definition
 //
-// morf type specs are arbitrary semi-colon separated strings enclosed in parentheses, following the Java type.  If a closing parenthesis or a
-// semicolon are needed in the string, they may be escaped with a backslash ("\").  The morfer specified is responsible for interpreting these
-// strings, which are delivered to the morfer as an array (or list) of decoded strings.  The use of a colon to separate name and value is not
-// required, but is conventional.  Some examples:
+// morf type specs are arbitrary semi-colon separated strings enclosed in parentheses, following the Java type.  If a parenthesis, a
+// semicolon, or a backslash are needed in the string, they may be escaped with a backslash ("\").  The morfer specified is responsible for
+// interpreting these strings, which are delivered to the morfer as an array (or list) of decoded strings.  The use of a colon to separate name and
+// value is not required, but is conventional.  Some examples:
 //
 //  // delivers ["simple"] to the morfer
 //  int (simple) simple;
@@ -114,3 +114,25 @@ morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
 [
     int (bits:7)(?);  // there is no name, as array elements may only be accessed by index or iterator...
 ]
+
+
+/////////////////////
+// ordered map of values, with morf type specs and optional (nullable) elements...
+<
+    String  alpha(?);
+    String  name;
+    String  hurricane(?);
+>
+
+
+/////////////////////
+// ordered map of values, with morf type specs and default values (default and optional values are mutually exclusive)...
+// default values are loaded into values when the value is constructed
+// default strings are interpreted by Morf for all Java primitives and enums; for all others it must be provided by the value class
+morfer com.dilatush.morf.morfers.Blob;  // the morfer class...
+<
+    boolean(bits:1) sign(default:false);
+    int(bits:11)    exponent(default:0);
+    long(bits:52)   fraction(default:0);
+>
+
